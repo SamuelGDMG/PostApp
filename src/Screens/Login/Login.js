@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { Text, View, TextInput, Button, TouchableOpacity } from 'react-native';
+import { Text, View, TextInput, Button, TouchableOpacity, AsyncStorage} from 'react-native';
 import StyleLogin from './LoginStyle.js'
+import URL from '../../API/URL.js'
 
 export default class Login extends Component {
 
@@ -19,6 +20,45 @@ export default class Login extends Component {
     }
 
     validarCampos(){
+        if(!this.state.email == "" && !this.state.senha == ""){
+            this.efetuarLogin();
+        }else{
+            console.log("Uh")
+        }
+        
+    }
+
+    componentDidMount(){
+        AsyncStorage.getItem("autenticacao").then(dados => {
+            if(dados !== null){
+                this.props.navigation.replace("PaginaPrincipal")
+            }
+        })
+    }
+
+    efetuarLogin(){
+        const requestInfo = {
+            method : 'POST',
+            body : JSON.stringify({
+                email : this.state.email,
+                senha : this.state.senha,
+            }),
+            headers : new Headers({
+                'Content-type': 'application/json',
+            })
+        }
+
+        fetch(URL.login, requestInfo).then(resposta => {
+            if(resposta.ok){
+                return resposta.text()
+            }
+            console.log(resposta.status)
+            throw new Error("Deu erro")
+        }).then(dados => JSON.parse(dados)).then(dados => {
+            console.log("Executei")
+            AsyncStorage.setItem("autenticacao", dados.token)
+            this.props.navigation.replace("PaginaPrincipal")
+        }).catch(err => console.log(err))
 
     }
 

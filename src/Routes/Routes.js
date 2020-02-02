@@ -3,6 +3,7 @@ import { createStackNavigator } from 'react-navigation-stack';
 
 import Login from '../Screens/Login/Login.js'
 import PreCadastro from '../Screens/PreCadastro/PreCadastro.js'
+import Main from '../Screens/Main/Main.js'
 
 const Routes = createAppContainer(
   createStackNavigator({
@@ -26,6 +27,12 @@ const Routes = createAppContainer(
             }
         },
       },
+      PaginaPrincipal: {
+        screen: Main,
+        navigationOptions :{
+        title : "PostApp - Compasso",
+        }
+      }
   },{
     defaultNavigationOptions: {
       headerTintColor: '#FFF',
