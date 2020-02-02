@@ -4,8 +4,8 @@ import StyleLogin from './LoginStyle.js'
 
 export default class Login extends Component {
 
-    constructor(){
-        super()
+    constructor(props){
+        super(props)
         this.state = {
             email : '',
             senha : ''
@@ -23,7 +23,7 @@ export default class Login extends Component {
     }
 
     abrirTelaCadastro(){
-        console.log("lalal")
+        this.props.navigation.navigate('PreCadastro');
     }
 
     render(){
