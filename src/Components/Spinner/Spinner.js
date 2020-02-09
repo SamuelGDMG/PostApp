@@ -4,6 +4,7 @@ import { Text, View, TextInput, Button, TouchableOpacity, KeyboardAvoidingView, 
 const largura = Dimensions.get("screen").width;
 
 const Spinner = (dados) => {
+    console.log("Aqui", dados.perfils)
     return (
         <Picker style={{flex: 1}}
             selectedValue={dados.selecionado}
@@ -11,7 +12,7 @@ const Spinner = (dados) => {
             onValueChange={(itemValue, itemIndex) =>
                 dados.alterarValorSpinner(dados.chave, itemValue)
             }>
-            {dados.categorias.map(categoria => <Picker.Item key={categoria._id} label={categoria.nome} value={categoria.nome} />)}
+            {dados.perfils.map(perfil => <Picker.Item key={perfil._id} label={perfil.nome} value={perfil.nome} />)}
         </Picker>
     );
 }

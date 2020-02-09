@@ -48,22 +48,27 @@ export default class Login extends Component {
             })
         }
 
+
         fetch(URL.login, requestInfo).then(resposta => {
+
+            console.log(requestInfo.userId)
+
             if(resposta.ok){
                 return resposta.text()
             }
             console.log(resposta.status)
             throw new Error("Deu erro")
         }).then(dados => JSON.parse(dados)).then(dados => {
-            console.log("Executei")
+            console.log(dados)
             AsyncStorage.setItem("autenticacao", dados.token)
+            AsyncStorage.setItem("idUsuario", dados.id)
             this.props.navigation.replace("PaginaPrincipal")
         }).catch(err => console.log(err))
 
     }
 
     abrirTelaCadastro(){
-        this.props.navigation.navigate('PreCadastro');
+        this.props.navigation.navigate('PreCadastro', {tipoTela: "Login"});
     }
 
     render(){

@@ -3,24 +3,9 @@ import {Modal, Alert, Text, View, TextInput, Button, TouchableOpacity, Touchable
 import estiloPreCadastro from '../PreCadastro/PreCadastroStyle.js'
 import Spinner from '../../Components/Spinner/Spinner.js'
 import ModalCursos from '../../Components/Modal/ModalCursos.js'
+import URL from '../../API/URL.js'
 
 const categorias = [{ _id: 1, nome: "Aluno" }, { _id: 2, nome: "Professor" }, { _id: 3, nome: "Coordenador" }, { _id: 4, nome: "Administração" }]
-const cursos = [
-    {
-      "ativo": true,
-      "_id": "5e3465d6c7192b3674baed02",
-      "nome": "Mecanica",
-      "data_criacao": "2020-01-31T17:37:26.324Z",
-      "__v": 0
-    },
-    {
-        "ativo": true,
-        "_id": "5e3465d6c7192b3674baed028",
-        "nome": "Mecatronica",
-        "data_criacao": "2020-01-31T17:37:26.324Z",
-        "__v": 0
-      }
-  ];
 
 export default class PreCadastro extends Component {
 
@@ -30,16 +15,68 @@ export default class PreCadastro extends Component {
         this.state = {
             categoria: "Aluno",
             coordCurso : "Matematica",
-            professorCursos : []
+            professorCursos : [],
+            tipoTela : false,
+            cursos : [],
+            perfil : []
         }
 
+    }
+
+    componentDidMount(){
+        if(!(this.props.navigation.state.params.tipoTela === "Login")){
+            this.buscarTiposPerfil();
+
+            this.setState({
+                tipoTela : true
+            })
+        }
+
+        this.buscarCursos();
+
+    }
+
+    buscarTiposPerfil(){
+        fetch(URL.buscarPerfils).then(res => {
+            if(res.ok){
+                return res.text()
+            }
+
+            throw new Error("Erro dentro do fecth buscar cursos")
+        }).then(dados => JSON.parse(dados)).then(perfils => {
+            this.setState({perfil : perfils.objeto})
+        })
+    }
+
+    salvarEstadoCursoModal(dados){
+        this.setState({
+            cursos : dados
+        })
+    }
+
+    buscarCursos(){
+        fetch(URL.buscarCursos).then(res => {
+            if(res.ok){
+                return res.text()
+            }
+
+            throw new Error("Erro dentro do fecth buscar cursos")
+        }).then(dados => JSON.parse(dados)).then(cursos => {
+
+            let meusCursos = cursos.objeto.map(curso => {
+                curso.estado = "unchecked"
+
+                return curso;
+            })
+
+            this.setState({cursos : meusCursos})
+        })
     }
 
     alterarValorSpinner(chave, escolha) {
         this.setState({
             [chave]: escolha
         })
-        console.log("Ei aqui", escolha)
     }
 
     render() {
@@ -50,17 +87,19 @@ export default class PreCadastro extends Component {
                     <Inputs/>
 
                     <View style={estiloPreCadastro.spinner}>
-                        <Spinner chave={"categoria"} categorias={categorias} selecionado={this.state.categoria} alterarValorSpinner={(chave, escolha) => this.alterarValorSpinner(chave, escolha)} />
+                        {
+                            this.state.tipoTela === true ? <Spinner chave={"categoria"} perfils={this.state.perfil} selecionado={this.state.categoria} alterarValorSpinner={(chave, escolha) => this.alterarValorSpinner(chave, escolha)} /> : null
+                        }
                     </View>
 
                     {
-                        this.state.categoria === "Coordenador" ? <SpinnerCoordenador selecionado={this.state.coordCurso} alterarValorSpinner={(chave, escolha) => this.alterarValorSpinner(chave, escolha)}/> : null
+                        this.state.categoria === "Coordenador" ? <SpinnerCoordenador cursos={this.state.cursos} selecionado={this.state.coordCurso} alterarValorSpinner={(chave, escolha) => this.alterarValorSpinner(chave, escolha)}/> : null
                     }
-                    <ModalCursos cursos={cursos}/>
+                    <ModalCursos setCursoModal={(dados) => this.salvarEstadoCursoModal(dados)} cursos={this.state.cursos}/>
 
                 </View>
                 <View style={{ margin: 8 }}>
-                    <Button color={"rgb(255,102,0)"} title="Cadastrar" onPress={() => console.log("awdaw")} />
+                    <Button color={"rgb(255,102,0)"} title="Cadastrar" onPress={() => console.log(this.state.cursos)} />
                 </View>
             </KeyboardAvoidingView>
         );
@@ -71,7 +110,7 @@ export default class PreCadastro extends Component {
 const SpinnerCoordenador = (dados) => {
     return (
         <View style={estiloPreCadastro.spinner}>
-            <Spinner chave={"coordCurso"} categorias={cursos} selecionado={dados.selecionado} alterarValorSpinner={(chave, escolha) => dados.alterarValorSpinner(chave, escolha)} />
+            <Spinner chave={"coordCurso"} perfils={dados.cursos} selecionado={dados.selecionado} alterarValorSpinner={(chave, escolha) => dados.alterarValorSpinner(chave, escolha)} />
         </View>
     );
 }
