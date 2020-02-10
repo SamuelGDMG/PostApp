@@ -5,8 +5,6 @@ import Spinner from '../../Components/Spinner/Spinner.js'
 import ModalCursos from '../../Components/Modal/ModalCursos.js'
 import URL from '../../API/URL.js'
 
-const categorias = [{ _id: 1, nome: "Aluno" }, { _id: 2, nome: "Professor" }, { _id: 3, nome: "Coordenador" }, { _id: 4, nome: "Administração" }]
-
 export default class PreCadastro extends Component {
 
     constructor(props) {

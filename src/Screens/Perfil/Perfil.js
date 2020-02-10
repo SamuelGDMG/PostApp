@@ -1,8 +1,9 @@
-import React, { Component } from 'react';
-import { Text, View, TextInput, Button, TouchableOpacity, AsyncStorage, Image } from 'react-native';
+import React, { Component, useState } from 'react';
+import { Text, View, TextInput, Button, TouchableOpacity, AsyncStorage, Image, Alert } from 'react-native';
 import URL from '../../API/URL.js'
 
 import estiloPerfil from './PerfilStyle.js'
+import AlertPerfil from '../../Components/AlertPerfil/AlertPerfil.js'
 
 export default class Perfil extends Component {
 
@@ -10,7 +11,8 @@ export default class Perfil extends Component {
         super();
 
         this.state = {
-            dadosMeuPerfil : {}
+            dadosMeuPerfil : {},
+            token : "",
         }
 
     }
@@ -19,6 +21,15 @@ export default class Perfil extends Component {
 
         this.buscarDadosPerfil()
 
+    }
+
+    atualizarUsuarioLocal(chave, valor){
+
+        let objUpdate =  Object.assign(this.state.dadosMeuPerfil, {[chave] : valor});
+
+        this.setState({
+            dadosMeuPerfil : objUpdate
+        })
     }
 
     async buscarDadosPerfil(){
@@ -35,8 +46,6 @@ export default class Perfil extends Component {
 
         var id = await AsyncStorage.getItem("idUsuario");
 
-        console.log(id)
-
         var urlPerfil = URL.buscarMeusDados + id;
 
         fetch(urlPerfil, requestInfo).then(resposta => {
@@ -50,7 +59,8 @@ export default class Perfil extends Component {
         }).then(dados => JSON.parse(dados)).then(dados => {
 
             this.setState({
-                dadosMeuPerfil : dados.objeto[0]
+                dadosMeuPerfil : dados.objeto[0],
+                token : token
             })
         }).catch(err => console.log(err))
 
@@ -60,9 +70,9 @@ export default class Perfil extends Component {
         return (
             <View style={estiloPerfil.container}>
                 <>
-                    <ConteudoMenu nome={this.state.dadosMeuPerfil.nome}/>
-                    <ConteudoMenu nome={this.state.dadosMeuPerfil.email}/>
-                    <ConteudoMenu nome={this.state.dadosMeuPerfil.cpf}/>
+                    <ConteudoMenu atualizarUsuarioLocal={(chave, valor) => this.atualizarUsuarioLocal(chave, valor)} token={this.state.token} id={this.state.dadosMeuPerfil._id} chave={"nome"} complemento={"nome"} nome={this.state.dadosMeuPerfil.nome}/>
+                    <ConteudoMenu atualizarUsuarioLocal={(chave, valor) => this.atualizarUsuarioLocal(chave, valor)} token={this.state.token} id={this.state.dadosMeuPerfil._id} chave={"email"} complemento={"email"} nome={this.state.dadosMeuPerfil.email}/>
+                    <ConteudoMenu atualizarUsuarioLocal={(chave, valor) => this.atualizarUsuarioLocal(chave, valor)} token={this.state.token} id={this.state.dadosMeuPerfil._id} chave={"cpf"} complemento={"cpf"} nome={this.state.dadosMeuPerfil.cpf}/>
                 </>
             </View>
         );
@@ -70,15 +80,21 @@ export default class Perfil extends Component {
 
 }
 
-//onPress={() => dados.funcao()}
-
 const ConteudoMenu = (dados) => {
+
+    const [meuEstado, setMeuEstado] = useState(false);
+
+    const funcao = () => setMeuEstado(!meuEstado)
+
     return (
         <>
-            <TouchableOpacity style={estiloPerfil.conteudoPerfil}>
+            <TouchableOpacity onPress={() => funcao()} style={estiloPerfil.conteudoPerfil}>
                 <Text style={estiloPerfil.texto}>{dados.nome}</Text>
                 <Image style={{ marginEnd: 8 }} source={require('../../../img/icons8-editar-24.png')} />
             </TouchableOpacity>
+            {
+                meuEstado ? <AlertPerfil {...dados} setModalVisible={(estado) => setMeuEstado(estado)} modalVisible={meuEstado}/> : null
+            }
         </>
     );
 }
