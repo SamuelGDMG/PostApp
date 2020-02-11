@@ -119,16 +119,16 @@ const Inputs = () => {
 
     return (
         <>
-            <Text style={estiloPreCadastro.texto}>Digite seu nome:</Text>
-            <TextInput style={estiloPreCadastro.form} placeholder="Nome..." />
-            <Text style={estiloPreCadastro.texto}>Digite seu e-mail:</Text>
-            <TextInput style={estiloPreCadastro.form} placeholder="Email..." />
-            <Text style={estiloPreCadastro.texto}>Digite seu CPF:</Text>
-            <TextInput style={estiloPreCadastro.form} placeholder="CPF..." />
-            <Text style={estiloPreCadastro.texto}>Digite uma senha:</Text>
-            <TextInput style={estiloPreCadastro.form} placeholder="Senha..." />
-            <Text style={estiloPreCadastro.texto}>Confirme a senha: </Text>
-            <TextInput style={estiloPreCadastro.form} placeholder="Senha..." />
+            <Text style={estiloPreCadastro.texto}>Nome Completo</Text>
+            <TextInput style={estiloPreCadastro.form} placeholder="Joaquim Teixeira" />
+            <Text style={estiloPreCadastro.texto}>E-mail</Text>
+            <TextInput style={estiloPreCadastro.form} placeholder="joaquim_teixeira99@hotmail.com" />
+            <Text style={estiloPreCadastro.texto}>CPF</Text>
+            <TextInput style={estiloPreCadastro.form} placeholder="xxx.xxx.xxx-xx" />
+            <Text style={estiloPreCadastro.texto}>Senha</Text>
+            <TextInput style={estiloPreCadastro.form} placeholder="a1VB4qrG9L" />
+            <Text style={estiloPreCadastro.texto}>Confirme a senha </Text>
+            <TextInput style={estiloPreCadastro.form} placeholder="a1VB4qrG9L" />
         </>
     );
 
