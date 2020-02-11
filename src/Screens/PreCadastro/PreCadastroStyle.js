@@ -10,7 +10,7 @@ const estiloPreCadastro = StyleSheet.create( {
     form : {
         width: largura * 0.8,
         height: 40,
-        borderColor: "rgb(255,102,0)",
+        borderColor: "#9B2626",
         borderWidth: 1,
         borderRadius: 4,
         padding: 5,
