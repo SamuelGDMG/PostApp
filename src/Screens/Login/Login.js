@@ -77,8 +77,8 @@ export default class Login extends Component {
                 <View style={StyleLogin.styleCard}>
                     <Text style={StyleLogin.titulo}>PostApp</Text>
                     <Form capturarDados={(campo, dados)=> this.capturarDados(campo, dados)}/>
-                    <View style={{width: 90}}>
-                        <Button color={"rgb(255,102,0)"} title="Login"  onPress={() => this.validarCampos()}/>
+                    <View style={{width: 100}}>
+                        <Button color={"#9B2626"} title="Login"  onPress={() => this.validarCampos()}/>
                     </View>
                     <TouchableOpacity onPress={() => this.abrirTelaCadastro()} style={{marginTop: 12}}>
                         <Text style={{color: "white"}}>Cadastrar-se</Text>
@@ -99,8 +99,8 @@ class Form extends Component{
     render(){
         return(
             <View style={{marginTop: 8, marginBottom: 8}}>
-                <TextInput onChangeText={email => this.props.capturarDados("email", email)} style={StyleLogin.form} placeholder="Email..."/>
-                <TextInput secureTextEntry={true} onChangeText={senha => this.props.capturarDados("senha", senha)} style={StyleLogin.form} placeholder="Senha..."/>
+                <TextInput onChangeText={email => this.props.capturarDados("email", email)} style={StyleLogin.form} placeholder="Email"/>
+                <TextInput secureTextEntry={true} onChangeText={senha => this.props.capturarDados("senha", senha)} style={StyleLogin.form} placeholder="Senha"/>
             </View>
         );
     }
